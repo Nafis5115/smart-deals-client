@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+:root {
+    background: white;
+    color: #000;
+}
