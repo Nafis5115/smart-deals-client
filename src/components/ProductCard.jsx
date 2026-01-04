@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router";
 
-const ProductCard = ({ product, index }) => {
+const ProductCard = ({ product }) => {
   return (
-    <div key={index} className="bg-white rounded-lg shadow  p-4">
+    <div className="bg-white rounded-lg shadow  p-4">
       <div className="bg-gray-300 h-44 rounded-md mb-4"></div>
 
       <h3 className="text-sm font-semibold text-gray-800 mb-2">
@@ -13,9 +14,12 @@ const ProductCard = ({ product, index }) => {
         {product.price}
       </p>
 
-      <button className="w-full border border-purple-500 text-purple-600 py-2 rounded-md text-sm hover:bg-purple-50">
+      <Link
+        to={"/product-details"}
+        className="w-full border cursor-pointer border-purple-500 text-purple-600 py-2 px-4 rounded-md text-sm hover:bg-purple-50"
+      >
         View Details
-      </button>
+      </Link>
     </div>
   );
 };

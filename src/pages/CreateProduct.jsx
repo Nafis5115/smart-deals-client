@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const CreateProduct = () => {
   return (
-    <section className="min-h-screen bg-gray-50 py-10 px-4">
+    <section className="min-h-screen bg-gray-50 py-10 px-4 mt-1">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-center">
           <Link

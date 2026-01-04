@@ -22,7 +22,7 @@ const Navbar = () => {
             <li key={link.name}>
               <NavLink
                 className={({ isActive }) =>
-                  isActive && "text-purple-600 font-semibold"
+                  isActive ? "text-purple-600 font-semibold" : ""
                 }
                 to={link.link}
                 end={link.link === "/"}

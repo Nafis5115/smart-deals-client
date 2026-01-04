@@ -1,6 +1,7 @@
 import React from "react";
 import { Search } from "lucide-react";
 import ProductCard from "../components/ProductCard";
+import { Link } from "react-router";
 const products = [
   {
     title: "Yamaha Fz Guitar [ Full Fresh Condition ]",
@@ -56,12 +57,18 @@ const Home = () => {
         </div>
 
         <div className="mt-6 flex justify-center gap-4">
-          <button className="bg-purple-600 text-white px-6 py-2 rounded-md text-sm">
+          <Link
+            to={"/all-products"}
+            className="bg-purple-600 cursor-pointer text-white px-6 py-2 rounded-md text-sm"
+          >
             Watch All Products
-          </button>
-          <button className="border border-purple-600 text-purple-600 px-6 py-2 rounded-md text-sm">
+          </Link>
+          <Link
+            to={"/create-product"}
+            className="border cursor-pointer border-purple-600 text-purple-600 px-6 py-2 rounded-md text-sm"
+          >
             Post an Product
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -72,7 +79,11 @@ const Home = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product, index) => (
-            <ProductCard product={product} index={index}></ProductCard>
+            <ProductCard
+              key={index}
+              product={product}
+              index={index}
+            ></ProductCard>
           ))}
         </div>
 
