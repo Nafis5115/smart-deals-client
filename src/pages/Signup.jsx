@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router";
 
 const Signup = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [imageURL, setImageURL] = useState("");
+  const user = [email, name, password, imageURL];
+  const handleSignup = (e) => {
+    e.preventDefault();
+    console.log(user);
+  };
+
   return (
     <div className="my-6 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-8">
@@ -19,12 +29,13 @@ const Signup = () => {
           </Link>
         </p>
 
-        <form className="mt-6 space-y-4">
+        <form className="mt-6 space-y-4" onSubmit={handleSignup}>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Name
             </label>
             <input
+              onChange={(e) => setName(e.target.value)}
               type="text"
               placeholder="smsowkothasan@gmail.com"
               className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
@@ -35,6 +46,7 @@ const Signup = () => {
               Email
             </label>
             <input
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="smsowkothasan@gmail.com"
               className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
@@ -45,6 +57,7 @@ const Signup = () => {
               Image URl
             </label>
             <input
+              onChange={(e) => setImageURL(e.target.value)}
               type="text"
               placeholder="smsowkothasan@gmail.com"
               className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
@@ -56,6 +69,7 @@ const Signup = () => {
               Password
             </label>
             <input
+              onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="************"
               className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
@@ -84,11 +98,11 @@ const Signup = () => {
             fill="#000000"
             className="w-6"
           >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
             <g
               id="SVGRepo_tracerCarrier"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             ></g>
             <g id="SVGRepo_iconCarrier">
               <path
