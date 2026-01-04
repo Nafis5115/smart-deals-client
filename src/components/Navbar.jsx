@@ -1,7 +1,14 @@
-import React from "react";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const Navbar = () => {
+  const navLinks = [
+    { name: "Home", link: "/" },
+    { name: "All Products", link: "/all-products" },
+    { name: "My Products", link: "/my-products" },
+    { name: "My Bids", link: "/my-bids" },
+    { name: "Create Product", link: "/create-product" },
+  ];
+
   return (
     <div>
       <nav className="bg-white px-8 py-4 shadow-md flex justify-between items-center">
@@ -11,24 +18,22 @@ const Navbar = () => {
           </h1>
         </div>
         <ul className="flex gap-4 text-[14px]">
-          <li>
-            <Link href="/">Home</Link>
-          </li>
-          <li>
-            <a href="">All Products</a>
-          </li>
-          <li>
-            <a href="">My Products</a>
-          </li>
-          <li>
-            <a href="">My Bids</a>
-          </li>
-          <li>
-            <a href="">Create Product</a>
-          </li>
+          {navLinks.map((link) => (
+            <li key={link.name}>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive && "text-purple-600 font-semibold"
+                }
+                to={link.link}
+                end={link.link === "/"}
+              >
+                {link.name}
+              </NavLink>
+            </li>
+          ))}
         </ul>
         <div className="flex gap-3">
-          <Link to={"login"} class="btn btn-outline btn-primary btn-sm">
+          <Link to={"login"} className="btn btn-outline btn-primary btn-sm">
             Login
           </Link>
           <Link to={"sign-up"} className="btn btn-primary btn-sm">
