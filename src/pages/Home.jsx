@@ -30,7 +30,7 @@ const Home = () => {
   return (
     <div className="bg-white mt-1">
       {/* HERO SECTION */}
-      <section className="bg-gradient-to-r from-purple-50 via-white to-cyan-50 py-20 text-center">
+      <section className="bg-linear-to-r from-purple-50 via-white to-cyan-50 py-20 text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
           Deal Your <span className="text-purple-600">Products</span>
           <br />

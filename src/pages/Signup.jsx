@@ -64,7 +64,7 @@ const Signup = () => {
 
           <button
             type="submit"
-            className="w-full cursor-pointer py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-purple-600 to-indigo-500 hover:opacity-90 transition"
+            className="w-full cursor-pointer py-3 rounded-lg text-white font-semibold bg-linear-to-r from-purple-600 to-indigo-500 hover:opacity-90 transition"
           >
             Register
           </button>
