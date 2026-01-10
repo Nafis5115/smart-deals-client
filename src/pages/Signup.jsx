@@ -3,7 +3,8 @@ import { Link } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 
 const Signup = () => {
-  const { createUser, updateUser, loading } = useContext(AuthContext);
+  const { createUser, updateUser, loading, googleLogin } =
+    useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +21,9 @@ const Signup = () => {
       .catch((e) => console.log(e));
   };
 
+  const handleGoogleSingUp = () => {
+    googleLogin().then((data) => console.log(data));
+  };
   return (
     <div className="my-6 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-8">
@@ -98,7 +102,10 @@ const Signup = () => {
           <div className="flex-1 h-px bg-gray-200"></div>
         </div>
 
-        <button className="w-full cursor-pointer flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 font-medium text-gray-700 hover:bg-gray-50 transition">
+        <button
+          onClick={handleGoogleSingUp}
+          className="w-full cursor-pointer flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 font-medium text-gray-700 hover:bg-gray-50 transition"
+        >
           <svg
             viewBox="-3 0 262 262"
             xmlns="http://www.w3.org/2000/svg"
