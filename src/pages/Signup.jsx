@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router";
+import { AuthContext } from "../context/AuthContext";
 
 const Signup = () => {
+  const { createUser, updateUser, loading } = useContext(AuthContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [imageURL, setImageURL] = useState("");
-  const user = [email, name, password, imageURL];
+
   const handleSignup = (e) => {
     e.preventDefault();
-    console.log(user);
+    createUser(email, password)
+      .then(() => {
+        return updateUser(name, imageURL);
+      })
+      .then((res) => console.log(res))
+      .catch((e) => console.log(e));
   };
 
   return (
@@ -80,7 +88,7 @@ const Signup = () => {
             type="submit"
             className="w-full cursor-pointer py-3 rounded-lg text-white font-semibold bg-linear-to-r from-purple-600 to-indigo-500 hover:opacity-90 transition"
           >
-            Register
+            {loading ? "Loading..." : "Register"}
           </button>
         </form>
 

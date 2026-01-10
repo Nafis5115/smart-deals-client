@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const navLinks = [
@@ -8,6 +10,8 @@ const Navbar = () => {
     { name: "My Bids", link: "/my-bids" },
     { name: "Create Product", link: "/create-product" },
   ];
+
+  const { user, logout, loading } = useContext(AuthContext);
 
   return (
     <div>
@@ -32,21 +36,26 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <div className="flex gap-3">
-          <Link to={"login"} className="btn btn-outline btn-primary btn-sm">
-            Login
-          </Link>
-          <Link to={"sign-up"} className="btn btn-primary btn-sm">
-            Register
-          </Link>
-          <div>
-            <img
-              className="hidden w-10 h-10 rounded-full object-cover border-2 border-black/20 cursor-pointer"
-              src="https://plus.unsplash.com/premium_photo-1689977927774-401b12d137d6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZSUyMG1lbnxlbnwwfHwwfHx8MA%3D%3D"
-              alt=""
-            />
-          </div>
-        </div>
+        {!loading ? (
+          !user ? (
+            <div className="flex gap-3">
+              <Link to={"login"} className="btn btn-outline btn-primary btn-sm">
+                Login
+              </Link>
+              <Link to={"sign-up"} className="btn btn-primary btn-sm">
+                Register
+              </Link>
+            </div>
+          ) : (
+            <div>
+              <button onClick={logout} className="btn btn-accent">
+                Logout
+              </button>
+            </div>
+          )
+        ) : (
+          <p>Loading...</p>
+        )}
       </nav>
     </div>
   );
