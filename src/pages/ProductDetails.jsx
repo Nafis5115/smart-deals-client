@@ -1,15 +1,17 @@
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import BidModal from "../components/BidModal";
 
 const ProductDetails = () => {
+  const productData = useLoaderData();
+
   const [open, setOpen] = useState(false);
   return (
     <section className="bg-gray-50 min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-          <div className="bg-gray-300 rounded-xl h-90" />
+          <img src={productData.image} alt="" />
 
           <div>
             <Link
@@ -21,25 +23,27 @@ const ProductDetails = () => {
             </Link>
 
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Yamaha Fz Guitar For Sale
+              {productData.name}
             </h1>
 
             <span className="inline-block text-xs bg-purple-100 text-purple-600 px-3 py-1 rounded-full mb-4">
-              Art And Hobbies
+              {productData.category}
             </span>
 
             <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border">
-              <p className="text-green-600 text-xl font-semibold">$22.5 - 30</p>
+              <p className="text-green-600 text-xl font-semibold">
+                {`$ ${productData.discount_price} - $ ${productData.price}`}
+              </p>
               <p className="text-sm text-gray-500">Price starts from</p>
             </div>
 
             <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border">
               <h3 className="font-semibold mb-2">Product Details</h3>
               <p className="text-sm text-gray-600">
-                <strong>Product ID:</strong> 68f753ae2174ca368ec882f4
+                <strong>Product ID:</strong> {productData._id}
               </p>
               <p className="text-sm text-gray-600">
-                <strong>Posted:</strong> 10/19/2024
+                <strong>Posted:</strong> {productData.createdAt}
               </p>
             </div>
 
@@ -94,11 +98,7 @@ const ProductDetails = () => {
           </div>
 
           <p className="text-sm text-gray-600 leading-relaxed">
-            It Is A Long Established Fact That A Reader Will Be Distracted By
-            The Readable Content Of A Page When Looking At Its Layout. The Point
-            Of Using Lorem Ipsum Is That It Has A More-Or-Less Normal
-            Distribution Of Letters, As Opposed To Using Content Here, Content
-            Here...
+            {productData.description}
           </p>
         </div>
 

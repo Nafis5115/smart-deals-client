@@ -9,6 +9,8 @@ import CreateProduct from "../pages/CreateProduct";
 import MyProducts from "../pages/MyProducts";
 import ProductDetails from "../pages/ProductDetails";
 import PrivateRoute from "./PrivateRoute";
+import { Suspense } from "react";
+import Loading from "../components/Loading";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +19,17 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: Home,
+        element: (
+          <Suspense fallback={<Loading></Loading>}>
+            <Home></Home>
+          </Suspense>
+        ),
+        loader: async () => {
+          return fetch("http://localhost:3000/latest-products").then((res) =>
+            res.json()
+          );
+        },
+        hydrateFallbackElement: <Loading></Loading>,
       },
       {
         path: "/login",
@@ -34,6 +46,12 @@ const router = createBrowserRouter([
             <AllProducts></AllProducts>
           </PrivateRoute>
         ),
+        loader: async () => {
+          return fetch("http://localhost:3000/all-products").then((res) =>
+            res.json()
+          );
+        },
+        hydrateFallbackElement: <Loading></Loading>,
       },
       {
         path: "/my-bids",
@@ -48,8 +66,13 @@ const router = createBrowserRouter([
         Component: MyProducts,
       },
       {
-        path: "/product-details",
+        path: "/product-details/:id",
         Component: ProductDetails,
+        loader: async ({ params }) => {
+          return fetch(`http://127.0.0.1:3000/details/${params.id}`).then(
+            (res) => res.json()
+          );
+        },
       },
     ],
   },
