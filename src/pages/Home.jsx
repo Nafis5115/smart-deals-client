@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Search } from "lucide-react";
 import ProductCard from "../components/ProductCard";
 import { Link, useLoaderData } from "react-router";
 
 const Home = () => {
   const productsData = useLoaderData();
+  const [search, setSearch] = useState("");
+  const filteredProducts = productsData.filter((product) =>
+    product.name.toLowerCase().includes(search.toLocaleLowerCase())
+  );
 
   return (
     <div className="bg-white mt-1">
@@ -23,6 +27,7 @@ const Home = () => {
         <div className="mt-8 flex justify-center">
           <div className="flex items-center bg-white shadow shadow-black/20 rounded-full w-full max-w-xl overflow-hidden">
             <input
+              onChange={(e) => setSearch(e.target.value)}
               type="text"
               placeholder="search For Products, Categories..."
               className="flex-1 px-5 py-3 outline-none text-sm"
@@ -55,7 +60,7 @@ const Home = () => {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {productsData.map((product, index) => (
+          {filteredProducts.map((product, index) => (
             <ProductCard key={index} product={product}></ProductCard>
           ))}
         </div>

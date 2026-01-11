@@ -1,12 +1,17 @@
 import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import BidModal from "../components/BidModal";
+import { AuthContext } from "../context/AuthContext";
+import Loading from "../components/Loading";
 
 const ProductDetails = () => {
   const productData = useLoaderData();
+  const { user, loading } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
+  if (loading) return <Loading></Loading>;
+
   return (
     <section className="bg-gray-50 min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4">
@@ -51,9 +56,12 @@ const ProductDetails = () => {
               <h3 className="font-semibold mb-3">Seller Information</h3>
 
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-gray-300 rounded-full" />
+                <img
+                  src={user.photoURL}
+                  className="w-10 h-10 bg-gray-300 rounded-full"
+                />
                 <div>
-                  <p className="font-medium">Sara Chen</p>
+                  <p className="font-medium">{user.displayName}</p>
                   <p className="text-xs text-gray-500">
                     crafts.by.sara@shop.net
                   </p>
@@ -61,10 +69,7 @@ const ProductDetails = () => {
               </div>
 
               <p className="text-sm text-gray-600">
-                <strong>Location:</strong> Los Angeles, CA
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Contact:</strong> sara_chen_contact
+                <strong>Contact:</strong> {user.email}
               </p>
               <p className="text-sm mt-2">
                 <span className="inline-flex px-3 py-1 text-xs rounded-full bg-yellow-400 text-black">
