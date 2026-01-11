@@ -22,7 +22,23 @@ const Signup = () => {
   };
 
   const handleGoogleSingUp = () => {
-    googleLogin().then((data) => console.log(data));
+    googleLogin().then((data) => {
+      const newUser = {
+        displayName: data.user.displayName,
+        email: data.user.email,
+        photoURL: data.user.photoURL,
+      };
+      fetch("http://localhost:3000/create-user", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log("create and save db", data))
+        .catch((e) => console.log(e));
+    });
   };
   return (
     <div className="my-6 flex items-center justify-center px-4">
