@@ -5,13 +5,13 @@ const ProductCard = ({ product }) => {
   return (
     <div className="bg-white rounded-lg shadow  p-4">
       <img
-        src={product.image}
+        src={product.imageURL}
         alt=""
         className="w-full h-60 object-cover rounded-md mb-2"
       />
 
       <h3 className="text-sm font-semibold text-gray-800 mb-2">
-        {product.name}
+        {product.title}
       </h3>
 
       <p className="text-purple-600 font-semibold text-sm mb-4">

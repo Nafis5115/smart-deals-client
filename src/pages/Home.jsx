@@ -7,7 +7,7 @@ const Home = () => {
   const productsData = useLoaderData();
   const [search, setSearch] = useState("");
   const filteredProducts = productsData.filter((product) =>
-    product.name.toLowerCase().includes(search.toLocaleLowerCase())
+    product.title.toLowerCase().includes(search.toLocaleLowerCase())
   );
 
   return (

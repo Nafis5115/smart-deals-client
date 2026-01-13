@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import BidModal from "../components/BidModal";
 import { AuthContext } from "../context/AuthContext";
@@ -7,16 +7,14 @@ import Loading from "../components/Loading";
 
 const ProductDetails = () => {
   const productData = useLoaderData();
-  const { user, loading } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
-  if (loading) return <Loading></Loading>;
 
   return (
     <section className="bg-gray-50 min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-          <img src={productData.image} alt="" />
+          <img src={productData.imageURL} alt="" />
 
           <div>
             <Link
@@ -28,7 +26,7 @@ const ProductDetails = () => {
             </Link>
 
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {productData.name}
+              {productData.title}
             </h1>
 
             <span className="inline-block text-xs bg-purple-100 text-purple-600 px-3 py-1 rounded-full mb-4">
@@ -37,7 +35,7 @@ const ProductDetails = () => {
 
             <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border">
               <p className="text-green-600 text-xl font-semibold">
-                {`$ ${productData.discount_price} - $ ${productData.price}`}
+                {`$ ${productData.discountPrice} - $ ${productData.price}`}
               </p>
               <p className="text-sm text-gray-500">Price starts from</p>
             </div>
@@ -47,9 +45,6 @@ const ProductDetails = () => {
               <p className="text-sm text-gray-600">
                 <strong>Product ID:</strong> {productData._id}
               </p>
-              <p className="text-sm text-gray-600">
-                <strong>Posted:</strong> {productData.createdAt}
-              </p>
             </div>
 
             <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border">
@@ -57,11 +52,11 @@ const ProductDetails = () => {
 
               <div className="flex items-center gap-3 mb-3">
                 <img
-                  src={user.photoURL}
+                  src={productData.sellerImageURL}
                   className="w-10 h-10 bg-gray-300 rounded-full"
                 />
                 <div>
-                  <p className="font-medium">{user.displayName}</p>
+                  <p className="font-medium">{productData.sellerName}</p>
                   <p className="text-xs text-gray-500">
                     crafts.by.sara@shop.net
                   </p>
@@ -69,7 +64,7 @@ const ProductDetails = () => {
               </div>
 
               <p className="text-sm text-gray-600">
-                <strong>Contact:</strong> {user.email}
+                <strong>Contact:</strong> {productData.sellerEmail}
               </p>
               <p className="text-sm mt-2">
                 <span className="inline-flex px-3 py-1 text-xs rounded-full bg-yellow-400 text-black">
@@ -94,11 +89,13 @@ const ProductDetails = () => {
           <div className="flex justify-between text-sm mb-3">
             <p>
               <strong>Condition :</strong>{" "}
-              <span className="text-purple-600">New</span>
+              <span className="text-purple-600">{productData.condition}</span>
             </p>
             <p>
               <strong>Usage Time :</strong>{" "}
-              <span className="text-purple-600">3 Month</span>
+              <span className="text-purple-600">
+                {productData.usageTime} months
+              </span>
             </p>
           </div>
 
