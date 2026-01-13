@@ -1,14 +1,22 @@
 import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import BidModal from "../components/BidModal";
-import { AuthContext } from "../context/AuthContext";
-import Loading from "../components/Loading";
 
 const ProductDetails = () => {
   const productData = useLoaderData();
-
   const [open, setOpen] = useState(false);
+  const [bids, setBids] = useState([]);
+  const fetchBids = useCallback(() => {
+    fetch(`http://localhost:3000/product/bids/${productData._id}`)
+      .then((res) => res.json())
+      .then((data) => setBids(data))
+      .catch(console.log);
+  }, [productData._id]);
+
+  useEffect(() => {
+    fetchBids();
+  }, [fetchBids]);
 
   return (
     <section className="bg-gray-50 min-h-screen py-8">
@@ -79,7 +87,12 @@ const ProductDetails = () => {
             >
               I Want Buy This Product
             </button>
-            <BidModal isOpen={open} onClose={() => setOpen(false)}></BidModal>
+            <BidModal
+              isOpen={open}
+              onClose={() => setOpen(false)}
+              productId={productData._id}
+              onBidCreated={fetchBids}
+            ></BidModal>
           </div>
         </div>
 
@@ -109,65 +122,61 @@ const ProductDetails = () => {
         </p>
 
         <h2 className="text-2xl font-semibold mb-4">
-          Bids For This Products: <span className="text-purple-500">03</span>
+          Bids For This Products:{" "}
+          <span className="text-purple-500">{bids.length}</span>
         </h2>
-
-        <div className="bg-white rounded-lg shadow-sm border overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead className="bg-gray-50 text-gray-600">
-              <tr>
-                <th className="px-6 py-3 text-left">SL No</th>
-                <th className="px-6 py-3 text-left">Product</th>
-                <th className="px-6 py-3 text-left">Seller</th>
-                <th className="px-6 py-3 text-left">Bid Price</th>
-                <th className="px-6 py-3 text-left">Actions</th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y">
-              {[1, 2, 3].map((i) => (
-                <tr key={i}>
-                  <td className="px-6 py-4">{i}</td>
-
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gray-300 rounded" />
-                      <div>
-                        <p className="font-medium">Orange Juice</p>
-                        <p className="text-xs text-gray-500">$22.5</p>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gray-300 rounded-full" />
-                      <div>
-                        <p className="font-medium">Sara Chen</p>
-                        <p className="text-xs text-gray-500">
-                          crafts.by.sara@shop.net
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td className="px-6 py-4 font-semibold">$10</td>
-
-                  <td className="px-6 py-4">
-                    <div className="flex gap-2">
-                      <button className="px-3 py-1 text-xs cursor-pointer rounded border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition">
-                        Accept Offer
-                      </button>
-                      <button className="px-3 py-1 text-xs cursor-pointer rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition">
-                        Reject Offer
-                      </button>
-                    </div>
-                  </td>
+        {bids.length === 0 ? (
+          <p>No bids yet.</p>
+        ) : (
+          <div className="bg-white rounded-lg shadow-sm border overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="bg-gray-50 text-gray-600">
+                <tr>
+                  <th className="px-6 py-3 text-left">SL No</th>
+                  <th className="px-6 py-3 text-left">Buyer</th>
+                  <th className="px-6 py-3 text-left">Bid Price</th>
+                  <th className="px-6 py-3 text-left">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+
+              <tbody className="divide-y">
+                {bids.map((bid) => (
+                  <tr key={bid._id}>
+                    <td className="px-6 py-4">{bid._id}</td>
+
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <img
+                          className="w-8 h-8 bg-gray-300 rounded-full object-cover"
+                          src={bid.buyerImageURL}
+                        />
+                        <div>
+                          <p className="font-medium">{bid.buyerName}</p>
+                          <p className="text-xs text-gray-500">
+                            {bid.buyerEmail}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="px-6 py-4 font-semibold">{bid.price}</td>
+
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2">
+                        <button className="px-3 py-1 text-xs cursor-pointer rounded border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition">
+                          Accept Offer
+                        </button>
+                        <button className="px-3 py-1 text-xs cursor-pointer rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition">
+                          Reject Offer
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </section>
   );

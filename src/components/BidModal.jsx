@@ -1,6 +1,38 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import Loading from "./Loading";
 
-const BidModal = ({ isOpen, onClose }) => {
+const BidModal = ({ isOpen, onClose, productId, onBidCreated }) => {
+  const { loading, user } = useContext(AuthContext);
+  const [price, setPrice] = useState("");
+  const [contact, setContact] = useState("");
+
+  const handleCreateBid = (e) => {
+    e.preventDefault();
+    const newBid = {
+      buyerName: user.displayName,
+      buyerEmail: user.email,
+      buyerImageURL: user.photoURL,
+      price,
+      contact,
+      productId,
+      status: "Pending",
+    };
+    fetch("http://localhost:3000/create-bid", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newBid),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        onBidCreated(data);
+        onClose();
+      })
+      .catch((e) => console.log(e));
+  };
+  if (loading) return <Loading></Loading>;
   if (!isOpen) return null;
   return (
     <>
@@ -18,23 +50,40 @@ const BidModal = ({ isOpen, onClose }) => {
             Give Seller Your Offered Price
           </h2>
 
-          <form className="space-y-5">
+          <form onSubmit={handleCreateBid} className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input label="Buyer Name" placeholder="Your name" />
-              <Input label="Buyer Email" placeholder="Your Email" />
+              <Input
+                label="Buyer Name"
+                placeholder="Your name"
+                value={user.displayName}
+                readOnly
+              />
+              <Input
+                label="Buyer Email"
+                placeholder="Your Email"
+                value={user.email}
+                readOnly
+              />
             </div>
 
             <Input
               label="Buyer Image URL"
               placeholder="https://...your_img_url"
+              value={user.photoURL}
+              readOnly
             />
 
             <Input
               label="Place your Price"
               placeholder="e.g. Artisan Roasters"
+              onChange={(e) => setPrice(e.target.value)}
             />
 
-            <Input label="Contact Info" placeholder="e.g. +1-555-1234" />
+            <Input
+              label="Contact Info"
+              placeholder="e.g. +1-555-1234"
+              onChange={(e) => setContact(e.target.value)}
+            />
 
             <div className="flex justify-end gap-3 pt-4">
               <button
