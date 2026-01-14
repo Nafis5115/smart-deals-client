@@ -13,7 +13,7 @@ const BidModal = ({ isOpen, onClose, productId, onBidCreated }) => {
       buyerName: user.displayName,
       buyerEmail: user.email,
       buyerImageURL: user.photoURL,
-      price,
+      price: Number(price),
       contact,
       productId,
       status: "Pending",

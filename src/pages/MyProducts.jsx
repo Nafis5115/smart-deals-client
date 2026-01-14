@@ -17,11 +17,25 @@ const MyProducts = () => {
         .catch((e) => console.log(e));
     }
   }, [user?.email]);
+  const handleProductDelete = (id) => {
+    fetch(`http://localhost:3000/delete-product/${id}`, { method: "DELETE" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.deletedCount) {
+          const remainingProducts = myProducts.filter(
+            (product) => product._id != id
+          );
+          setMyProducts(remainingProducts);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
   if (loading) return <Loading></Loading>;
   return (
     <section className="max-w-7xl mx-auto px-6 py-10">
       <h2 className="text-3xl font-semibold text-center mb-8">
-        My Products: <span className="text-purple-500">10</span>
+        My Products:{" "}
+        <span className="text-purple-500">{myProducts.length}</span>
       </h2>
 
       <div className="overflow-x-auto bg-white rounded-lg border border-gray-200 shadow-sm">
@@ -66,7 +80,10 @@ const MyProducts = () => {
                       Edit
                     </button>
 
-                    <button className="px-3 py-1.5 text-xs cursor-pointer rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition">
+                    <button
+                      onClick={() => handleProductDelete(product._id)}
+                      className="px-3 py-1.5 text-xs cursor-pointer rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
+                    >
                       Delete
                     </button>
 
