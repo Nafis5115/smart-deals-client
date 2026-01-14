@@ -41,11 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/all-products",
-        element: (
-          <PrivateRoute>
-            <AllProducts></AllProducts>
-          </PrivateRoute>
-        ),
+        element: <AllProducts></AllProducts>,
         loader: async () => {
           return fetch("http://localhost:3000/all-products").then((res) =>
             res.json()
