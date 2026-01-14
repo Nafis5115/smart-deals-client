@@ -1,8 +1,11 @@
 import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router";
+import { AuthContext } from "../context/AuthContext";
+import Loading from "../components/Loading";
 
 const CreateProduct = () => {
+  const { user, loading } = useContext(AuthContext);
   const [condition, setCondition] = useState("Brand New");
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
@@ -10,9 +13,7 @@ const CreateProduct = () => {
   const [discountPrice, setDiscountPrice] = useState("");
   const [usageTime, setUsageTime] = useState("");
   const [imageURL, setImageURL] = useState("");
-  const [sellerName, setSellerName] = useState("");
-  const [sellerEmail, setSellerEmail] = useState("");
-  const [sellerImageURL, setSellerImageURL] = useState("");
+
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
 
@@ -33,21 +34,10 @@ const CreateProduct = () => {
     if (!imageURL) {
       newErrors.imageURL = "Product image URL is required";
     }
-    if (!sellerName.trim()) newErrors.sellerName = "Seller name is required";
-    if (!sellerEmail) {
-      newErrors.sellerEmail = "Email is required";
-    } else if (!/^\S+@\S+\.\S+$/.test(sellerEmail)) {
-      newErrors.sellerEmail = "Invalid email address";
-    }
-    if (!sellerImageURL) {
-      newErrors.sellerImageURL = "Seller image URL is required";
-    }
 
     if (!location.trim()) newErrors.location = "Location is required";
     if (!description.trim()) {
       newErrors.description = "Description is required";
-    } else if (description.length < 20) {
-      newErrors.description = "Description must be at least 20 characters";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -60,9 +50,6 @@ const CreateProduct = () => {
     setDiscountPrice("");
     setUsageTime("");
     setImageURL("");
-    setSellerName("");
-    setSellerEmail("");
-    setSellerImageURL("");
     setLocation("");
     setDescription("");
   };
@@ -79,9 +66,9 @@ const CreateProduct = () => {
       description,
       condition,
       usageTime,
-      sellerEmail,
-      sellerImageURL,
-      sellerName,
+      sellerEmail: user?.email,
+      sellerImageURL: user?.photoURL,
+      sellerName: user?.displayName,
       location,
     };
     fetch("http://localhost:3000/create-product", {
@@ -98,6 +85,7 @@ const CreateProduct = () => {
       })
       .catch((e) => console.log(e));
   };
+  if (loading) return <Loading></Loading>;
   return (
     <section className="min-h-screen bg-gray-50 py-10 px-4 mt-1">
       <div className="max-w-4xl mx-auto">
@@ -203,27 +191,24 @@ const CreateProduct = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Input
-                value={sellerName}
+                value={user?.displayName}
                 label="Seller Name"
                 placeholder="e.g. Artisan Roasters"
-                onChange={(e) => setSellerName(e.target.value)}
-                isError={errors.sellerName}
+                readOnly
               />
               <Input
-                value={sellerEmail}
+                value={user?.email}
                 label="Seller Email"
                 placeholder="leli31955@nrlord.com"
-                onChange={(e) => setSellerEmail(e.target.value)}
-                isError={errors.sellerEmail}
+                readOnly
               />
             </div>
 
             <Input
-              value={sellerImageURL}
+              value={user?.photoURL}
               label="Seller Image URL"
               placeholder="https://..."
-              onChange={(e) => setSellerImageURL(e.target.value)}
-              isError={errors.sellerImageURL}
+              readOnly
             />
 
             <Input

@@ -1,12 +1,23 @@
-import React from "react";
-const products = Array.from({ length: 10 }, (_, i) => ({
-  id: i + 1,
-  name: "Orange Juice",
-  category: "Beverage",
-  price: "$100",
-  status: "Pending",
-}));
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import Loading from "../components/Loading";
+
 const MyProducts = () => {
+  const { user } = useContext(AuthContext);
+  const [myProducts, setMyProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (user?.email) {
+      fetch(`http://localhost:3000/myProducts?email=${user?.email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setMyProducts(data);
+          setLoading(false);
+        })
+        .catch((e) => console.log(e));
+    }
+  }, [user?.email]);
+  if (loading) return <Loading></Loading>;
   return (
     <section className="max-w-7xl mx-auto px-6 py-10">
       <h2 className="text-3xl font-semibold text-center mb-8">
@@ -22,34 +33,31 @@ const MyProducts = () => {
               <th className="px-6 py-4 text-left">Product Name</th>
               <th className="px-6 py-4 text-left">Category</th>
               <th className="px-6 py-4 text-left">Price</th>
-              <th className="px-6 py-4 text-left">Status</th>
+
               <th className="px-6 py-4 text-left">Actions</th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-gray-200">
-            {products.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-50 transition">
-                <td className="px-6 py-4 font-medium">{product.id}</td>
+            {myProducts.map((product, index) => (
+              <tr key={product._id} className="hover:bg-gray-50 transition">
+                <td className="px-6 py-4 font-medium">{index + 1}</td>
 
                 <td className="px-6 py-4">
-                  <div className="w-12 h-12 bg-gray-300 rounded" />
+                  <img
+                    className="w-12 h-12 bg-gray-300 rounded object-cover"
+                    src={product.imageURL}
+                  />
                 </td>
 
                 <td className="px-6 py-4 font-medium text-gray-900">
-                  {product.name}
+                  {product.title}
                 </td>
 
                 <td className="px-6 py-4 text-gray-700">{product.category}</td>
 
                 <td className="px-6 py-4 font-semibold text-gray-900">
                   {product.price}
-                </td>
-
-                <td className="px-6 py-4">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-400 text-black">
-                    {product.status}
-                  </span>
                 </td>
 
                 <td className="px-6 py-4">
