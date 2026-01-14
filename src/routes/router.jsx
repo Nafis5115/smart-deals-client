@@ -55,7 +55,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/my-bids",
-        Component: MyBids,
+        element: (
+          <PrivateRoute>
+            <MyBids></MyBids>
+          </PrivateRoute>
+        ),
         loader: async () => {
           return fetch("http://localhost:3000/all-products").then((res) =>
             res.json()
@@ -64,11 +68,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/create-product",
-        Component: CreateProduct,
+        element: (
+          <PrivateRoute>
+            <CreateProduct></CreateProduct>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/my-products",
-        Component: MyProducts,
+        element: (
+          <PrivateRoute>
+            <MyProducts></MyProducts>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/product-details/:id",

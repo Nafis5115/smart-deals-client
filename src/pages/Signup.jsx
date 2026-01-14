@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";
-import { Link } from "react-router";
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 
 const Signup = () => {
-  const { createUser, updateUser, loading, googleLogin } =
+  const { createUser, updateUser, loading, googleLogin, user } =
     useContext(AuthContext);
-
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -40,6 +40,11 @@ const Signup = () => {
         .catch((e) => console.log(e));
     });
   };
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
   return (
     <div className="my-6 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-8">

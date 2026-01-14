@@ -1,10 +1,14 @@
 import { ArrowLeft } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router";
 import BidModal from "../components/BidModal";
+import { AuthContext } from "../context/AuthContext";
 
 const ProductDetails = () => {
   const productData = useLoaderData();
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const isOwnProduct = productData.sellerEmail === user?.email;
   const [open, setOpen] = useState(false);
   const [bids, setBids] = useState([]);
   const fetchBids = useCallback(() => {
@@ -81,12 +85,23 @@ const ProductDetails = () => {
               </p>
             </div>
 
-            <button
-              onClick={() => setOpen(true)}
-              className="w-full py-3 cursor-pointer rounded-lg text-white font-medium text-lg bg-linear-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 transition"
-            >
-              I Want Buy This Product
-            </button>
+            {isOwnProduct ? (
+              <p>This is your product</p>
+            ) : (
+              <button
+                onClick={() => {
+                  if (user) {
+                    setOpen(true);
+                  } else {
+                    navigate("/login");
+                    setOpen(false);
+                  }
+                }}
+                className="w-full py-3 cursor-pointer rounded-lg text-white font-medium text-lg bg-linear-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 transition"
+              >
+                I Want Buy This Product
+              </button>
+            )}
             <BidModal
               isOpen={open}
               onClose={() => setOpen(false)}

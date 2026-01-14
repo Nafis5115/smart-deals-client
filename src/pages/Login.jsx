@@ -1,20 +1,37 @@
-import { useContext, useState } from "react";
-import { Link } from "react-router";
+import { useContext, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
+import Loading from "../components/Loading";
 
 const Login = () => {
-  const { signInUser, googleLogin } = useContext(AuthContext);
+  const { signInUser, googleLogin, user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirect = location.state?.pathname || "/";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSignIn = (e) => {
     e.preventDefault();
     signInUser(email, password)
-      .then((data) => console.log(data.user))
+      .then((data) => {
+        console.log(data.user);
+        navigate("/");
+      })
       .catch((e) => console.log(e));
   };
   const handleGoogleSingIn = () => {
-    googleLogin().then((data) => console.log(data));
+    googleLogin().then((data) => {
+      console.log(data);
+      navigate("/");
+    });
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate(redirect);
+    }
+  }, [user, navigate, redirect]);
   return (
     <div className="min-h-screen flex items-center justify-center  px-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-8">
