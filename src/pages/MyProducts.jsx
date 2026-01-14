@@ -21,7 +21,7 @@ const MyProducts = () => {
     fetch(`http://localhost:3000/delete-product/${id}`, { method: "DELETE" })
       .then((res) => res.json())
       .then((data) => {
-        if (data.deletedCount) {
+        if (data.productResult.deletedCount) {
           const remainingProducts = myProducts.filter(
             (product) => product._id != id
           );
