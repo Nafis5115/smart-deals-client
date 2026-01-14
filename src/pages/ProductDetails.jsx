@@ -61,7 +61,7 @@ const ProductDetails = () => {
               <div className="flex items-center gap-3 mb-3">
                 <img
                   src={productData.sellerImageURL}
-                  className="w-10 h-10 bg-gray-300 rounded-full"
+                  className="w-10 h-10 bg-gray-300 rounded-full object-cover"
                 />
                 <div>
                   <p className="font-medium">{productData.sellerName}</p>
@@ -140,14 +140,14 @@ const ProductDetails = () => {
               </thead>
 
               <tbody className="divide-y">
-                {bids.map((bid) => (
+                {bids.map((bid, index) => (
                   <tr key={bid._id}>
-                    <td className="px-6 py-4">{bid._id}</td>
+                    <td className="px-6 py-4">{index + 1}</td>
 
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <img
-                          className="w-8 h-8 bg-gray-300 rounded-full object-cover"
+                          className="w-8 h-8 bg-gray-300 rounded-full object-fill"
                           src={bid.buyerImageURL}
                         />
                         <div>

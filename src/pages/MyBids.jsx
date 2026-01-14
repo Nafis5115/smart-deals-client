@@ -1,24 +1,38 @@
-import React from "react";
-const bids = Array.from({ length: 10 }, (_, i) => ({
-  id: i + 1,
-  product: "Orange Juice",
-  price: "$22.5",
-  seller: {
-    name: "Sara Chen",
-    email: "crafts.by.sara@shop.net",
-  },
-  bidPrice: "$10",
-  status: "Pending",
-}));
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import Loading from "../components/Loading";
+import { useLoaderData } from "react-router";
+import { useMemo } from "react";
+
 const MyBids = () => {
+  const products = useLoaderData();
+  const [loading, setLoading] = useState(true);
+  const { user } = useContext(AuthContext);
+  const [myBids, setMyBids] = useState([]);
+  const productMap = useMemo(() => {
+    const map = {};
+    products.forEach((p) => (map[p._id] = p));
+    return map;
+  }, [products]);
+
+  useEffect(() => {
+    if (!user?.email) return;
+
+    fetch(`http://localhost:3000/myBids?email=${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setMyBids(data);
+        setLoading(false);
+      })
+      .catch((e) => console.log(e));
+  }, [user?.email]);
+  if (loading) return <Loading></Loading>;
   return (
     <section className="max-w-7xl mx-auto px-6 py-10">
-      {/* Title */}
       <h2 className="text-3xl font-semibold text-center mb-8">
-        My Bids: <span className="text-purple-500">10</span>
+        My Bids: <span className="text-purple-500">{myBids.length}</span>
       </h2>
 
-      {/* Table */}
       <div className="overflow-x-auto bg-white rounded-lg shadow-sm border border-black/20">
         <table className="min-w-full text-sm">
           <thead className="bg-gray-50 text-gray-600">
@@ -33,57 +47,65 @@ const MyBids = () => {
           </thead>
 
           <tbody className="divide-y divide-black/20">
-            {bids.map((bid) => (
-              <tr key={bid.id} className="hover:bg-gray-50 transition">
-                {/* SL */}
-                <td className="px-6 py-4 font-medium">{bid.id}</td>
+            {myBids.map((bid, index) => {
+              const product = productMap[bid.productId];
 
-                {/* Product */}
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gray-200 rounded" />
-                    <div>
-                      <p className="font-medium text-gray-900">{bid.product}</p>
-                      <p className="text-gray-500 text-xs">{bid.price}</p>
+              return (
+                <tr key={bid._id} className="hover:bg-gray-50 transition">
+                  <td className="px-6 py-4 font-medium">{index + 1}</td>
+
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-4">
+                      <img
+                        className="w-12 h-12 bg-gray-200 rounded object-cover"
+                        src={product.imageURL}
+                      />
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {product.title}
+                        </p>
+                        <p className="text-gray-500 text-xs">
+                          {product?.price}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </td>
+                  </td>
 
-                {/* Seller */}
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-300" />
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {bid.seller.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {bid.seller.email}
-                      </p>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <img
+                        className="w-10 h-10 rounded-full bg-gray-300 object-cover"
+                        src={product.sellerImageURL}
+                      />
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {product.sellerName}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {product.sellerEmail}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </td>
+                  </td>
 
-                {/* Bid Price */}
-                <td className="px-6 py-4 font-semibold text-gray-900">
-                  {bid.bidPrice}
-                </td>
+                  <td className="px-6 py-4 font-semibold text-gray-900">
+                    {bid.price}
+                  </td>
 
-                {/* Status */}
-                <td className="px-6 py-4">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-400 text-black">
-                    {bid.status}
-                  </span>
-                </td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-400 text-black">
+                      {bid.status}
+                    </span>
+                  </td>
 
-                {/* Action */}
-                <td className="px-6 py-4">
-                  <button className="px-4 py-1.5 text-sm rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition">
-                    Remove Bid
-                  </button>
-                </td>
-              </tr>
-            ))}
+                  <td className="px-6 py-4">
+                    <button className="px-4 py-1.5 text-sm rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition">
+                      Remove Bid
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

@@ -56,6 +56,11 @@ const router = createBrowserRouter([
       {
         path: "/my-bids",
         Component: MyBids,
+        loader: async () => {
+          return fetch("http://localhost:3000/all-products").then((res) =>
+            res.json()
+          );
+        },
       },
       {
         path: "/create-product",
