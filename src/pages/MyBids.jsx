@@ -17,10 +17,9 @@ const MyBids = () => {
 
   useEffect(() => {
     if (!user?.email) return;
-
-    fetch(`http://localhost:3000/myBids?email=${user.email}`, {
+    fetch(`http://localhost:3000/myBids?email=${user?.email}`, {
       headers: {
-        authorization: `Bearer ${user?.accessToken}`,
+        authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((res) => res.json())
@@ -29,7 +28,23 @@ const MyBids = () => {
         setLoading(false);
       })
       .catch((e) => console.log(e));
-  }, [user?.email, user?.accessToken]);
+  }, [user]);
+
+  // useEffect(() => {
+  //   if (!user?.email) return;
+
+  //   fetch(`http://localhost:3000/myBids?email=${user.email}`, {
+  //     headers: {
+  //       authorization: `Bearer ${user?.accessToken}`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setMyBids(data);
+  //       setLoading(false);
+  //     })
+  //     .catch((e) => console.log(e));
+  // }, [user?.email, user?.accessToken]);
   if (loading) return <Loading></Loading>;
   return (
     <section className="max-w-7xl mx-auto px-6 py-10">
