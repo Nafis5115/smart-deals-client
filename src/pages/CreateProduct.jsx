@@ -1,11 +1,12 @@
 import { ArrowLeft } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router";
-import { AuthContext } from "../context/AuthContext";
 import Loading from "../components/Loading";
+import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 const CreateProduct = () => {
-  const { user, loading } = useContext(AuthContext);
+  const { user, loading } = useAuth();
   const [condition, setCondition] = useState("Brand New");
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
@@ -71,19 +72,27 @@ const CreateProduct = () => {
       sellerName: user?.displayName,
       location,
     };
-    fetch("http://localhost:3000/create-product", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then((res) => res.json())
+
+    axios
+      .post("http://localhost:3000/create-product", newProduct)
       .then((data) => {
         console.log(data);
         resetForm();
       })
       .catch((e) => console.log(e));
+    // fetch("http://localhost:3000/create-product", {
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    //   body: JSON.stringify(newProduct),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     resetForm();
+    //   })
+    //   .catch((e) => console.log(e));
   };
   if (loading) return <Loading></Loading>;
   return (
