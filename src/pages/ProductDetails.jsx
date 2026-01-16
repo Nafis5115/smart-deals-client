@@ -3,7 +3,8 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router";
 import BidModal from "../components/BidModal";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
+
+import useAxios from "../hooks/useAxios";
 
 const ProductDetails = () => {
   const productData = useLoaderData();
@@ -12,15 +13,16 @@ const ProductDetails = () => {
   const isOwnProduct = productData.sellerEmail === user?.email;
   const [open, setOpen] = useState(false);
   const [bids, setBids] = useState([]);
+  const axiosInstance = useAxios();
   const fetchBids = useCallback(() => {
-    axios
-      .get(`http://localhost:3000/product/bids/${productData._id}`)
+    axiosInstance
+      .get(`/product/bids/${productData._id}`)
       .then((data) => {
         console.log(data);
         setBids(data.data);
       })
       .catch((e) => console.log(e));
-  }, [productData._id]);
+  }, [productData._id, axiosInstance]);
 
   useEffect(() => {
     fetchBids();

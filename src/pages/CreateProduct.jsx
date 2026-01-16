@@ -2,8 +2,9 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import Loading from "../components/Loading";
-import axios from "axios";
+
 import useAuth from "../hooks/useAuth";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const CreateProduct = () => {
   const { user, loading } = useAuth();
@@ -19,6 +20,7 @@ const CreateProduct = () => {
   const [description, setDescription] = useState("");
 
   const [errors, setErrors] = useState({});
+  const axiosSecure = useAxiosSecure();
   const validate = () => {
     const newErrors = {};
     if (!title.trim()) newErrors.title = "Title is required";
@@ -73,7 +75,7 @@ const CreateProduct = () => {
       location,
     };
 
-    axios
+    axiosSecure
       .post("http://localhost:3000/create-product", newProduct)
       .then((data) => {
         console.log(data);
