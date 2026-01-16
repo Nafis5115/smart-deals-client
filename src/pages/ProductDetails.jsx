@@ -3,6 +3,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router";
 import BidModal from "../components/BidModal";
 import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 
 const ProductDetails = () => {
   const productData = useLoaderData();
@@ -12,10 +13,13 @@ const ProductDetails = () => {
   const [open, setOpen] = useState(false);
   const [bids, setBids] = useState([]);
   const fetchBids = useCallback(() => {
-    fetch(`http://localhost:3000/product/bids/${productData._id}`)
-      .then((res) => res.json())
-      .then((data) => setBids(data))
-      .catch(console.log);
+    axios
+      .get(`http://localhost:3000/product/bids/${productData._id}`)
+      .then((data) => {
+        console.log(data);
+        setBids(data.data);
+      })
+      .catch((e) => console.log(e));
   }, [productData._id]);
 
   useEffect(() => {
