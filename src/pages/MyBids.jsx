@@ -3,12 +3,14 @@ import { AuthContext } from "../context/AuthContext";
 import Loading from "../components/Loading";
 import { useLoaderData } from "react-router";
 import { useMemo } from "react";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const MyBids = () => {
   const products = useLoaderData();
   const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
   const [myBids, setMyBids] = useState([]);
+  const axiosSecure = useAxiosSecure();
   const productMap = useMemo(() => {
     const map = {};
     products.forEach((p) => (map[p._id] = p));
@@ -17,18 +19,14 @@ const MyBids = () => {
 
   useEffect(() => {
     if (!user?.email) return;
-    fetch(`http://localhost:3000/myBids?email=${user?.email}`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => res.json())
+    axiosSecure
+      .get(`/myBids?email=${user?.email}`)
       .then((data) => {
-        setMyBids(data);
+        setMyBids(data.data);
         setLoading(false);
       })
       .catch((e) => console.log(e));
-  }, [user]);
+  }, [user, axiosSecure]);
 
   // useEffect(() => {
   //   if (!user?.email) return;

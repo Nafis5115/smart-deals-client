@@ -57,7 +57,6 @@ const AuthProvider = ({ children }) => {
           })
             .then((res) => res.json())
             .then((data) => {
-              console.log("tokenGenerate", data);
               localStorage.setItem("token", data.token);
             })
             .catch((e) => console.log(e));
