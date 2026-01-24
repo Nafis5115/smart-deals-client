@@ -61,8 +61,6 @@ const AuthProvider = ({ children }) => {
             })
             .catch((e) => console.log(e));
         }
-
-        console.log(currentUser);
       } else {
         localStorage.removeItem("token");
         console.log("Logged out");

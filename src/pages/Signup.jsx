@@ -17,7 +17,7 @@ const Signup = () => {
       .then(() => {
         return updateUser(name, imageURL);
       })
-      .then((res) => console.log(res))
+      .then(() => {})
       .catch((e) => console.log(e));
   };
 
@@ -36,8 +36,8 @@ const Signup = () => {
         body: JSON.stringify(newUser),
       })
         .then((res) => res.json())
-        .then((data) => console.log("create and save db", data))
-        .catch((e) => console.log(e));
+        .then(() => {})
+        .catch(() => {});
     });
   };
   useEffect(() => {

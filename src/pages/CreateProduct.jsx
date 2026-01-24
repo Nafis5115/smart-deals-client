@@ -77,8 +77,7 @@ const CreateProduct = () => {
 
     axiosSecure
       .post("http://localhost:3000/create-product", newProduct)
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         resetForm();
       })
       .catch((e) => console.log(e));
